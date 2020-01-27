@@ -13,8 +13,9 @@ os.system("vlc-ctrl play -p /home/ayushman/Documents/cello.mp4")
 
 Pause = 0
 
-try:
-    while True:
+
+while True:
+    try:
         ret, frame = cap.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces = detector(gray)
@@ -30,9 +31,11 @@ try:
             os.system("vlc-ctrl pause")
         Pause = 0
 
-except KeyboardInterrupt:
+    except KeyboardInterrupt:
+        print("GoodBye!")
+        break
 
-    print("GoodBye!")
+    
 
 cap.release()
 cv2.destroyAllWindows()
