@@ -1,31 +1,38 @@
-import numpy as np
-import cv2
+import numpy as np 
+import cv2 
 import os 
 import vlc_ctrl
+import dlib 
+
 
 cap = cv2.VideoCapture(0)
 
-os.system("vlc-ctrl play -p /home/ayushman/Documents/cello.mp4")
-face_cascade  = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-Pause = 0 
-try:
-	while True:
-		ret , img = cap.read() 
-		gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-		faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+detector = dlib.get_frontal_face_detector()
 
-		for (x, y, w, h) in faces:
-			print ("Yep")
-			os.system("vlc-ctrl play")
-			Pause = 1 
-		if Pause == 0: 
-			print ("Nope")
-			os.system("vlc-ctrl pause")
-		Pause = 0 
+os.system("vlc-ctrl play -p /home/ayushman/Documents/cello.mp4")
+
+Pause = 0
+
+try:
+    while True:
+        ret, frame = cap.read()
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = detector(gray)
+
+        for face in faces:
+
+            print("Yep")
+            os.system("vlc-ctrl play")
+            Pause = 1
+
+        if Pause == 0:
+            print("Nope")
+            os.system("vlc-ctrl pause")
+        Pause = 0
 
 except KeyboardInterrupt:
 
-	print ("Goodbye!") 
+    print("GoodBye!")
 
 cap.release()
-cv2.destoryAllWindows() 
+cv2.destroyAllWindows()
