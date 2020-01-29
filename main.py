@@ -3,7 +3,7 @@ import cv2
 import os 
 import vlc_ctrl
 import dlib 
-
+import enhance
 
 cap = cv2.VideoCapture(0)
 
@@ -17,7 +17,8 @@ Pause = 0
 while True:
     try:
         ret, frame = cap.read()
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        adjusted = enhance.adjust_gamma(frame, gamma= 1.5)
+        gray = cv2.cvtColor(adjusted, cv2.COLOR_BGR2GRAY)
         faces = detector(gray)
 
         for face in faces:
