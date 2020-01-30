@@ -6,5 +6,5 @@ Smart VLC Media Player
 1. OpenCV
 2. vlc-ctrl
 3. Dlib
-
+4. Linux 
 

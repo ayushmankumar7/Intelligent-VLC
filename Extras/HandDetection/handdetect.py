@@ -2,9 +2,11 @@ import cv2
 import numpy as np
 import enhance
 
+
 cap = cv2.VideoCapture('paper.mp4')
 
 frames = 1
+
 threshhold = 160
 while(1):
     ret, frame = cap.read()
