@@ -4,7 +4,7 @@ import enhance
 
 cap = cv2.VideoCapture(0)
 kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
+fgbg =cv2.createBackgroundSubtractorMOG2() #For python3
 threshhold = 160
 pframes = 1
 nframes = 1
