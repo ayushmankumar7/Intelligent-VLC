@@ -46,7 +46,7 @@ def segment(image, threshold=25):
                                     cv2.CHAIN_APPROX_SIMPLE)
 
     
-    print(np.array(cnts).shape)
+    print(np.array(cnts))
     # return None, if no contours detected
     if len(cnts) == 0:
         return
