@@ -13,7 +13,7 @@ def clip(frame, side):
 
 
 
-
+state = 0
 
 labels = ["Slap", "Rock", "Paper", "Swing"]
 camera = cv2.VideoCapture(0)
@@ -53,9 +53,15 @@ while(1):
     # run the inference
     # image_array = np.expand_dims(image_array, axis=0)
     prediction = model.predict(data)
+    
     pred = np.argmax(prediction)
-    print(labels[pred])
+    statep = pred
+    if statep == state:
+        print(end = "")
+    else:
 
+        print(labels[pred])
+        state = pred
     keypress = cv2.waitKey(50) & 0xFF
     if keypress == ord("q"):
         break
