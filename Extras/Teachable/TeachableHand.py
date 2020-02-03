@@ -15,7 +15,7 @@ def clip(frame, side):
 
 state = 0
 
-labels = ["Slap", "Rock", "Paper", "Swing"]
+labels = ["Point", "Full", "Nothing", "Swing"]
 camera = cv2.VideoCapture(0)
 
 # Disable scientific notation for clarity
@@ -62,7 +62,7 @@ while(1):
 
         print(labels[pred])
         state = pred
-    keypress = cv2.waitKey(50) & 0xFF
+    keypress = cv2.waitKey(100) & 0xFF
     if keypress == ord("q"):
         break
 camera.release()
