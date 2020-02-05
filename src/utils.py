@@ -61,9 +61,7 @@ def predict(boxes, scores, classes, threshold, width, height, num_hands=2):
 
 def printing(v, lock):
     while True:
-        if True:
-            with lock:
-                v.value = 0
+        state = 0
         with lock:
-            u = v.value
-        print(u)
+            
+            print(v.value)
