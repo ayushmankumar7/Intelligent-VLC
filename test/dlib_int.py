@@ -29,6 +29,8 @@ try:
             print("Nope")
             os.system("vlc-ctrl pause")
         Pause = 0
+	
+
 
 except KeyboardInterrupt:
 

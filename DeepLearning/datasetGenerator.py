@@ -2,7 +2,7 @@ import cv2
 import numpy as np 
 import os 
 
-m = int(input("Enter Class : 1 or 2 : "))
+m = int(input("Enter Class : 1, 2, 3 or 4 : "))
 
 
 cap = cv2.VideoCapture(0)
@@ -18,10 +18,22 @@ while True:
         i += 1
         filename = "invideo/0/"+str(i)+".jpg"
         cv2.imwrite(filename, frame)
-    else:
-        j += 1
-        filename = "invideo/1/"+str(j)+".jpg"
+
+    elif m == 2:
+        i += 1
+        filename = "invideo/0/"+str(i)+".jpg"
         cv2.imwrite(filename, frame)
+
+    elif m == 3:
+        i += 1
+        filename = "invideo/0/"+str(i)+".jpg"
+        cv2.imwrite(filename, frame)
+
+    elif m == 4:
+        i += 1
+        filename = "invideo/0/"+str(i)+".jpg"
+        cv2.imwrite(filename, frame)
+
         
 
     cv2.imshow('frame', frame)

@@ -4,14 +4,6 @@ import numpy as np
 import cv2
 
 
-def clip(frame, side):
-    if side == "right":
-        frame = frame[:, :260, :]
-    else:
-        frame = frame[:, 400:, :]
-    return frame
-
-
 
 state = 0
 
@@ -25,7 +17,6 @@ np.set_printoptions(suppress=True)
 model = tensorflow.keras.models.load_model('keras_model.h5')
 while(1):
     ret, frame = camera.read()
-    bc = clip(frame, "right")
     image = cv2.resize(frame, (224, 224))
     # Create the array of the right shape to feed into the keras model
     # The 'length' or number of images you can put into the array is
