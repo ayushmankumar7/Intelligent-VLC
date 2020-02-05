@@ -2,7 +2,7 @@ import cv2
 import numpy as np 
 import os 
 
-m = int(input("Enter Class : 1, 2, 3 or 4 : "))
+m = int(input("Enter Class : 1, 2, 3 or 4(neg) : "))
 
 
 cap = cv2.VideoCapture(0)
