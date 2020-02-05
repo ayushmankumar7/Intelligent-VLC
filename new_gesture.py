@@ -1,6 +1,4 @@
-"""
-@author: Viet Nguyen <nhviet1009@gmail.com>
-"""
+
 import tensorflow as tf
 import cv2
 import multiprocessing as _mp
