@@ -6,7 +6,7 @@ from src.config import HAND_GESTURES
 
 import os 
 import vlc_ctrl
-#os.system("vlc-ctrl play -p /home/ayushman/Documents/cello.mp4")
+os.system("vlc-ctrl play -p /home/ayushman/Documents/cello.mp4")
 
 def is_in_triangle(point, triangle):
     # barycentric coordinate system
@@ -73,4 +73,20 @@ def printing(v, lock):
         else:
             print(u)
             state = u
+            vlc_actions(state)
+
+def testPrint(v,lock):
+    while True:
+        with lock:
+            u = v.value
+
+        print(u)
+
+def vlc_actions(trigger):
+    if trigger == 1:
+        os.system("vlc-ctrl volume -0.1")
+    if trigger == 2:
+        os.system("vlc-ctrl volume +0.1")
+
+            
         

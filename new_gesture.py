@@ -2,7 +2,7 @@
 import tensorflow as tf
 import cv2
 import multiprocessing as _mp
-from src.utils import load_graph, detect_hands, predict, printing
+from src.utils import load_graph, detect_hands, predict, printing, testPrint
 from src.config import ORANGE, RED, GREEN
 
 tf.flags.DEFINE_integer("width", 640, "Screen width")
@@ -66,6 +66,9 @@ def main():
                 v.value = action
             cv2.putText(frame, "{}".format(text), (x_min, y_min - 5),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, GREEN, 2)
+        else:
+            with lock:
+                v.value = 40                
         overlay = frame.copy()
         cv2.rectangle(overlay, (0, 0), (int(FLAGS.width / 3), FLAGS.height), ORANGE, -1)
         cv2.rectangle(overlay, (int(2 * FLAGS.width / 3), 0), (FLAGS.width, FLAGS.height), ORANGE, -1)
