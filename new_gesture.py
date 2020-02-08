@@ -6,8 +6,8 @@ from src.utils import load_graph, detect_hands, predict, printing, pp
 from src.config import ORANGE, RED, GREEN
 import dlib 
 import os
-
-
+from threading import Thread
+from enhance import adjust_gamma
 
 
 tf.flags.DEFINE_integer("width", 640, "Screen width")
@@ -21,7 +21,6 @@ FLAGS = tf.flags.FLAGS
 
 def main():
     Pause = 0
-    detector = dlib.get_frontal_face_detector()
 
     graph, sess = load_graph(FLAGS.pre_trained_model_path)
     cap = cv2.VideoCapture(0)
@@ -40,16 +39,15 @@ def main():
             if key == ord("q"):
                 break
             _, frame = cap.read()
-            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-            faces = detector(gray)
+            frame = adjust_gamma(frame, gamma=1.5)
+            
 
             frame = cv2.flip(frame, 1)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             boxes, scores, classes = detect_hands(frame, graph, sess)
             frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
             results = predict(boxes, scores, classes, FLAGS.threshold, FLAGS.width, FLAGS.height)
-            pp(faces)
+            #Thread(target = pp, args = (frame,)).start()
             if len(results) == 1:
                 x_min, x_max, y_min, y_max, category = results[0]
                 x = int((x_min + x_max) / 2)
@@ -58,10 +56,10 @@ def main():
 
                 if category == "Open" and x <= FLAGS.width / 3:
                     action = 7  # Left jump
-                    text = "Jump left"
+                    text = "Next Track"
                 elif category == "Closed" and x <= FLAGS.width / 3:
                     action = 6  # Left
-                    text = "Run left"
+                    text = "Prev Track"
                 elif category == "Open" and FLAGS.width / 3 < x <= 2 * FLAGS.width / 3:
                     action = 5  # Jump
                     text = "Jump"
@@ -70,10 +68,10 @@ def main():
                     text = "Stay"
                 elif category == "Open" and x > 2 * FLAGS.width / 3:
                     action = 2  # Right jump
-                    text = "Jump right"
+                    text = "Vol Up"
                 elif category == "Closed" and x > 2 * FLAGS.width / 3:
                     action = 1  # Right
-                    text = "Run right"
+                    text = "Vol Down"
                 else:
                     action = 0
                     text = "Stay"

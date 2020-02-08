@@ -6,13 +6,14 @@ from VideoShow import VideoShow
 
 def putIterationsPerSec(frame ,iterations_per_sec):
 
-    cv2.putText(frame, "{{:.0f}} iterations/sec".format(iterations_per_sec), (10,450), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255,255,255))
+    cv2.putText(frame, f"{iterations_per_sec} iterations/sec", (10,450), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255,255,255))
     return frame 
     
-def threadVideoGet(source=0):
+def threadVideoGet(source="small.mp4"):
     
     video_getter = VideoGet(source).start()
-    cps = CountsPerSec().start()
+    cps = CountsPerSec()
+    cps.start()
 
     while True:
         if (cv2.waitKey(1) == ord("q")) or video_getter.stopped:
@@ -67,5 +68,6 @@ def threadBoth(source=0):
         cps.increment()
 
 
+threadVideoGet()
 threadVideoShow()
 

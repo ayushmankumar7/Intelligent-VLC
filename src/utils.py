@@ -3,21 +3,12 @@ import numpy as np
 import tensorflow as tf
 from time import sleep
 from src.config import HAND_GESTURES
-
+import cv2 
 import os 
 import vlc_ctrl
+import dlib 
 
-def is_in_triangle(point, triangle):
-    # barycentric coordinate system
-    x, y = point
-    (xa, ya), (xb, yb), (xc, yc) = triangle
-    a = ((yb - yc)*(x - xc) + (xc - xb)*(y - yc)) / ((yb - yc)*(xa - xc) + (xc - xb)*(ya - yc))
-    b = ((yc - ya) * (x - xc) + (xa - xc) * (y - yc)) / ((yb - yc) * (xa - xc) + (xc - xb) * (ya - yc))
-    c = 1 - a - b
-    if 0 <= a <= 1 and 0 <= b <= 1 and 0 <= c <= 1:
-        return True
-    else:
-        return False
+#Thread(target = self.show, args =()).start()
 
 
 def load_graph(path):
@@ -81,9 +72,18 @@ def vlc_actions(trigger):
     if trigger == 2:
         os.system("vlc-ctrl volume +0.1")
 
+    if trigger == 6:
+        os.system("vlc-ctrl prev")
+    if trigger == 7:
+        os.system("vlc-ctrl next")
+
             
         
-def pp(faces, Pause = 0):
+def pp(frame, Pause = 0):
+    detector = dlib.get_frontal_face_detector()
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    faces = detector(gray)
     for face in faces:
         
         os.system("vlc-ctrl play")
