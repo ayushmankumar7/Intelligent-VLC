@@ -3,6 +3,8 @@ import cv2
 from CountsPerSec import CountsPerSec
 from VideoGet import VideoGet
 from VideoShow import VideoShow
+import dlib
+
 
 def putIterationsPerSec(frame ,iterations_per_sec):
 
@@ -27,10 +29,12 @@ def threadVideoGet(source="small.mp4"):
 
 
 def threadVideoShow(source = 0):
+    
 
     cap = cv2.VideoCapture(source)
 
     (grabbed, frame)= cap.read()
+    
     video_shower = VideoShow(frame).start()
     cps = CountsPerSec()
     print(cps)
@@ -68,6 +72,4 @@ def threadBoth(source=0):
         cps.increment()
 
 
-threadVideoGet()
-threadVideoShow()
-
+threadBoth()

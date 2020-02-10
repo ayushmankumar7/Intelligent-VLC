@@ -7,6 +7,8 @@ import cv2
 import os 
 import vlc_ctrl
 import dlib 
+import multiprocessing as _mp
+
 
 #Thread(target = self.show, args =()).start()
 
@@ -79,8 +81,11 @@ def vlc_actions(trigger):
 
             
         
-def pp(frame, Pause = 0):
-    detector = dlib.get_frontal_face_detector()
+def pp(frame, lock):
+    
+    with lock:
+        frame = frame.value
+    print(frame)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     faces = detector(gray)

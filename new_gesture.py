@@ -8,6 +8,43 @@ import dlib
 import os
 from threading import Thread
 from enhance import adjust_gamma
+from VideoShow import VideoShow, putIterationsPerSec
+from CountsPerSec import CountsPerSec
+from VideoGet import VideoGet
+
+
+
+def threadVideoShow(ret, frame):   
+  
+    video_shower = VideoShow(frame).start()
+    cps = CountsPerSec()
+    print(cps)
+    p = cps.start()
+    
+
+    while True:
+        
+        if not ret or video_shower.stopped:
+            video_shower.stop()
+            break
+            
+        frame = putIterationsPerSec(frame, cps.countsPerSec())
+        video_shower.frame = frame
+        cps.increment()
+face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_alt2.xml")
+def adjusted_detect_face(img): 
+      
+    face_img = img.copy() 
+      
+    face_rect = face_cascade.detectMultiScale(face_img,  
+                                              scaleFactor = 1.2,  
+                                              minNeighbors = 5) 
+      
+    for (x, y, w, h) in face_rect: 
+        cv2.rectangle(face_img, (x, y),  
+                      (x + w, y + h), (255, 255, 255), 10)
+          
+    return face_img 
 
 
 tf.flags.DEFINE_integer("width", 640, "Screen width")
@@ -17,7 +54,7 @@ tf.flags.DEFINE_float("alpha", 0.3, "Transparent level")
 tf.flags.DEFINE_string("pre_trained_model_path", "src/pretrained_model.pb", "Path to pre-trained model")
 
 FLAGS = tf.flags.FLAGS
-
+#detector = dlib.get_frontal_face_detector()
 
 def main():
     Pause = 0
@@ -29,25 +66,27 @@ def main():
     mp = _mp.get_context("spawn")
     v = mp.Value('i', 0)
     lock = mp.Lock()
+    
     process = mp.Process(target=printing, args=(v, lock))
     os.system("vlc-ctrl play -p /home/ayushman/Documents/cello.mp4")
-
+    
     process.start()
+
     try:
         while True:
             key = cv2.waitKey(1)
             if key == ord("q"):
                 break
-            _, frame = cap.read()
-            frame = adjust_gamma(frame, gamma=1.5)
-            
-
+            ret, frame = cap.read()
+            f = adjusted_detect_face(frame)
+            frame = adjust_gamma(frame, gamma=1.5)           
             frame = cv2.flip(frame, 1)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             boxes, scores, classes = detect_hands(frame, graph, sess)
             frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
             results = predict(boxes, scores, classes, FLAGS.threshold, FLAGS.width, FLAGS.height)
-            #Thread(target = pp, args = (frame,)).start()
+            cv2.imshow('fac', f)
+            
             if len(results) == 1:
                 x_min, x_max, y_min, y_max, category = results[0]
                 x = int((x_min + x_max) / 2)
@@ -86,7 +125,7 @@ def main():
             cv2.rectangle(overlay, (0, 0), (int(FLAGS.width / 3), FLAGS.height), ORANGE, -1)
             cv2.rectangle(overlay, (int(2 * FLAGS.width / 3), 0), (FLAGS.width, FLAGS.height), ORANGE, -1)
             cv2.addWeighted(overlay, FLAGS.alpha, frame, 1 - FLAGS.alpha, 0, frame)
-            cv2.imshow('Detection', frame)
+            #cv2.imshow('Detection', frame)
     except KeyboardInterrupt:
 
         print("GoodBye!")
